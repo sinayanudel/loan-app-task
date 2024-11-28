@@ -10,6 +10,9 @@ app = FastAPI()
 
 # Dependency
 
+@app.get("/health")
+async def root():
+    return {"message": "the application is running"}
 
 def get_db():
     db = database.SessionLocal()
@@ -17,7 +20,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
 
 @app.post("/loans/", response_model=schemas.Loan)
 def create_loan(loan: schemas.LoanCreate, db: Session = Depends(get_db)):
