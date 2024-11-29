@@ -8,15 +8,23 @@ class LoanBase(BaseModel):
     term_months: int
 
 
-class LoanCreate(LoanBase):
+class PersonalLoanBase(LoanBase):
+    purpose: str
+    
+
+class MortgageLoanBase(LoanBase):
+    address: str
+
+class PersonalLoanCreateUpdate(PersonalLoanBase):
     pass
 
-
-class LoanUpdate(LoanBase):
+class MortgageLoanCreateUpdate(MortgageLoanBase):
     pass
 
+class PersonalLoan(PersonalLoanBase):
+    id: int
 
-class Loan(LoanBase):
+class MortgageLoan(MortgageLoanBase):
     id: int
 
     class Config:

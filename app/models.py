@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float
+from sqlalchemy import Column, Integer, Float, String
 from .database import Base
 # models.py
 
@@ -13,9 +13,9 @@ class Loan(Base):
 
 class PersonalLoan(Loan):
     __tablename__ = 'personal_loans'
-    # Additional fields specific to personal loans
+    purpose = Column(String, nullable=False)
 
 
 class MortgageLoan(Loan):
     __tablename__ = 'mortgage_loans'
-    # Additional fields specific to mortgage loans
+    address = Column(String, nullable=False)

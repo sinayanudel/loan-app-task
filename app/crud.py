@@ -1,20 +1,20 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 
+# personal loans CRUD
+def get_personal_loan(db: Session, loan_id: int):
+    return db.query(models.PersonalLoan).filter(models.PersonalLoan.id == loan_id).first()
 
-def get_loan(db: Session, loan_id: int):
-    return db.query(models.Loan).filter(models.Loan.id == loan_id).first()
 
-
-def create_loan(db: Session, loan: schemas.LoanCreate):
-    db_loan = models.Loan(**loan.dict())
+def create_personal_loan(db: Session, loan: schemas.PersonalLoanCreateUpdate):
+    db_loan = models.PersonalLoan(**loan.dict())
     db.add(db_loan)
     db.commit()
     db.refresh(db_loan)
     return db_loan
 
 
-def update_loan(db: Session, loan_id: int, loan: schemas.LoanUpdate):
+def update_personal_loan(db: Session, loan_id: int, loan: schemas.PersonalLoanCreateUpdate):
     db_loan = get_loan(db, loan_id)
     if db_loan:
         for key, value in loan.dict().items():
@@ -24,8 +24,10 @@ def update_loan(db: Session, loan_id: int, loan: schemas.LoanUpdate):
     return db_loan
 
 
-def delete_loan(db: Session, loan_id: int):
+def delete_personal_loan(db: Session, loan_id: int):
     db_loan = get_loan(db, loan_id)
     if db_loan:
         db.delete(db_loan)
         db.commit()
+
+# Mortgage loans CRUD
