@@ -18,11 +18,12 @@ def create_loan(db: Session, loan: schemas.PersonalLoanCreateUpdate):
 
 def update_loan(db: Session, loan_id: int, loan: schemas.PersonalLoanCreateUpdate):
     db_loan = get_loan(db, loan_id)
-    if db_loan:
-        for key, value in loan.dict().items():
-            setattr(db_loan, key, value)
-        db.commit()
-        db.refresh(db_loan)
+    if db_loan is None:
+        return None
+    for key, value in loan.dict().items():
+        setattr(db_loan, key, value)
+    db.commit()
+    db.refresh(db_loan)
     return db_loan
 
 

@@ -37,7 +37,10 @@ def read_personal_loan(loan_id: int, db: Session = Depends(get_db)):
 def update_personal_loan(
     loan_id: int, loan: schemas.PersonalLoanCreateUpdate, db: Session = Depends(get_db)
 ):
-    return crud_personal.update_loan(db=db, loan_id=loan_id, loan=loan)
+    db_loan = crud_personal.update_loan(db=db, loan_id=loan_id, loan=loan)
+    if db_loan is None:
+        raise HTTPException(status_code=404, detail="Loan not found")
+    return db_loan
 
 
 @app.delete("/loans/personal/{loan_id}")
@@ -66,7 +69,10 @@ def read_mortgage_loan(loan_id: int, db: Session = Depends(get_db)):
 def update_mortgage_loan(
     loan_id: int, loan: schemas.MortgageLoanCreateUpdate, db: Session = Depends(get_db)
 ):
-    return crud_mortgage.update_loan(db=db, loan_id=loan_id, loan=loan)
+    db_loan = crud_mortgage.update_loan(db=db, loan_id=loan_id, loan=loan)
+    if db_loan is None:
+        raise HTTPException(status_code=404, detail="Loan not found")
+    return db_loan
 
 
 @app.delete("/loans/mortgage/{loan_id}")
