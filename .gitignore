@@ -1,3 +1,5 @@
 Task.docx
 ~$Task.docx
-app/__pycache__/main.cpython-313.pyc
+loans.db
+app/__pycache__/*
+tests/__pycache__/*

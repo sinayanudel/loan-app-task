@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from .database import engine, get_db
-from . import models, schemas, crud, database
+from . import models, schemas, crud
 
 #note: normally we should we migrations
 models.Base.metadata.create_all(bind=engine)
