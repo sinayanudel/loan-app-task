@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from .database import engine
+from .database import engine, get_db
 from . import models, schemas, crud, database
 
+#note: normally we should we migrations
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -14,14 +15,6 @@ app = FastAPI()
 @app.get("/health")
 async def root():
     return {"message": "the application is running"}
-
-
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.post("/loans/", response_model=schemas.Loan)
