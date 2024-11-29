@@ -15,7 +15,7 @@ def create_personal_loan(db: Session, loan: schemas.PersonalLoanCreateUpdate):
 
 
 def update_personal_loan(db: Session, loan_id: int, loan: schemas.PersonalLoanCreateUpdate):
-    db_loan = get_loan(db, loan_id)
+    db_loan = get_personal_loan(db, loan_id)
     if db_loan:
         for key, value in loan.dict().items():
             setattr(db_loan, key, value)
@@ -25,7 +25,7 @@ def update_personal_loan(db: Session, loan_id: int, loan: schemas.PersonalLoanCr
 
 
 def delete_personal_loan(db: Session, loan_id: int):
-    db_loan = get_loan(db, loan_id)
+    db_loan = get_personal_loan(db, loan_id)
     if db_loan:
         db.delete(db_loan)
         db.commit()
