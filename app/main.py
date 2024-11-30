@@ -1,18 +1,16 @@
 import logging
 import ssl
 import os
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import FastAPI
 import uvicorn
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
 from .database import engine
 from . import models
 from .routers import personal_loans, mortgage_loans
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Note: Normally we should use migrations
 models.Base.metadata.create_all(bind=engine)
