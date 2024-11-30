@@ -8,7 +8,15 @@ The application uses Basic Authentication to secure its endpoints. Users must pr
 
 In the production environment, the app use HTTPS instead of HTTP to ensure the security and privacy of the data transmitted between the client and the server. HTTPS encrypts the data, making it difficult for unauthorized parties to intercept and read the information.
 
+**Important:** Do not push sensitive data such as passwords, API keys, or any other confidential information to the shared repository on GitHub. Use environment variables or secret management tools to handle such data securely.
+
 ## Development Environment
+
+Create a `.env` file in the root directory of the project and add your environment-specific variables. For example:
+```
+BASIC_AUTH_USERNAME=your_username 
+BASIC_AUTH_PASSWORD=your_password
+```
 
 Use these PowerShell commands to set up the application:
 ```
