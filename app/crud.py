@@ -7,7 +7,7 @@ def get_loan(db: Session, loan_id: int, loan_model):
 
 
 def create_loan(db: Session, loan: schemas.LoanBase, loan_model):
-    db_loan = loan_model(**loan.dict())
+    db_loan = loan_model(**loan.model_dump())
     db.add(db_loan)
     db.commit()
     db.refresh(db_loan)
@@ -18,7 +18,7 @@ def update_loan(db: Session, loan_id: int, loan: schemas.LoanBase, loan_model):
     db_loan = get_loan(db, loan_id, loan_model)
     if db_loan is None:
         return None
-    for key, value in loan.dict().items():
+    for key, value in loan.model_dump().items():
         setattr(db_loan, key, value)
     db.commit()
     db.refresh(db_loan)
