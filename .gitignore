@@ -5,3 +5,4 @@ app/__pycache__/*
 tests/__pycache__/*
 app/crud/__pycache__/*
 .env
+app/routers/__pycache__/*

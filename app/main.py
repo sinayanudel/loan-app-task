@@ -3,7 +3,6 @@ import ssl
 import os
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from sqlalchemy.orm import Session
 import uvicorn
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from dotenv import load_dotenv
@@ -11,8 +10,9 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-from .database import engine, get_db
-from . import models, schemas, crud
+from .database import engine
+from . import models
+from .routers import personal_loans, mortgage_loans
 
 # Note: Normally we should use migrations
 models.Base.metadata.create_all(bind=engine)
@@ -22,8 +22,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
-
-security = HTTPBasic()
 
 # Add HTTPS redirect middleware only in production
 if os.getenv("ENV") == "production":
@@ -38,22 +36,6 @@ async def log_requests(request, call_next):
     return response
 
 
-# Dependency to get the current user
-def get_current_user(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = os.getenv("BASIC_AUTH_USERNAME")
-    correct_password = os.getenv("BASIC_AUTH_PASSWORD")
-    if (
-        credentials.username != correct_username
-        or credentials.password != correct_password
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return credentials.username
-
-
 # Health API
 @app.get("/health")
 async def root():
@@ -61,111 +43,9 @@ async def root():
     return {"message": "the application is running"}
 
 
-# Personal loans API
-@app.post("/loans/personal", response_model=schemas.PersonalLoan)
-def create_personal_loan(
-    loan: schemas.PersonalLoanCreateUpdate,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Creating personal loan with data: {loan}")
-    return crud.create_loan(db=db, loan=loan, loan_model=models.PersonalLoan)
-
-
-@app.get("/loans/personal/{loan_id}", response_model=schemas.PersonalLoan)
-def read_personal_loan(
-    loan_id: int,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Reading personal loan with ID: {loan_id}")
-    db_loan = crud.get_loan(db, loan_id=loan_id, loan_model=models.PersonalLoan)
-    if db_loan is None:
-        logger.warning(f"Personal loan with ID {loan_id} not found")
-        raise HTTPException(status_code=404, detail="Loan not found")
-    return db_loan
-
-
-@app.put("/loans/personal/{loan_id}", response_model=schemas.PersonalLoan)
-def update_personal_loan(
-    loan_id: int,
-    loan: schemas.PersonalLoanCreateUpdate,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Updating personal loan with ID: {loan_id} with data: {loan}")
-    db_loan = crud.update_loan(
-        db=db, loan_id=loan_id, loan=loan, loan_model=models.PersonalLoan
-    )
-    if db_loan is None:
-        logger.warning(f"Personal loan with ID {loan_id} not found")
-        raise HTTPException(status_code=404, detail="Loan not found")
-    return db_loan
-
-
-@app.delete("/loans/personal/{loan_id}")
-def delete_personal_loan(
-    loan_id: int,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Deleting personal loan with ID: {loan_id}")
-    crud.delete_loan(db, loan_id=loan_id, loan_model=models.PersonalLoan)
-    return {"detail": "Loan deleted"}
-
-
-# Mortgage loans API
-@app.post("/loans/mortgage", response_model=schemas.MortgageLoan)
-def create_mortgage_loan(
-    loan: schemas.MortgageLoanCreateUpdate,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Creating mortgage loan with data: {loan}")
-    return crud.create_loan(db=db, loan=loan, loan_model=models.MortgageLoan)
-
-
-@app.get("/loans/mortgage/{loan_id}", response_model=schemas.MortgageLoan)
-def read_mortgage_loan(
-    loan_id: int,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Reading mortgage loan with ID: {loan_id}")
-    db_loan = crud.get_loan(db, loan_id=loan_id, loan_model=models.MortgageLoan)
-    if db_loan is None:
-        logger.warning(f"Mortgage loan with ID {loan_id} not found")
-        raise HTTPException(status_code=404, detail="Loan not found")
-    return db_loan
-
-
-@app.put("/loans/mortgage/{loan_id}", response_model=schemas.MortgageLoan)
-def update_mortgage_loan(
-    loan_id: int,
-    loan: schemas.MortgageLoanCreateUpdate,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Updating mortgage loan with ID: {loan_id} with data: {loan}")
-    db_loan = crud.update_loan(
-        db=db, loan_id=loan_id, loan=loan, loan_model=models.MortgageLoan
-    )
-    if db_loan is None:
-        logger.warning(f"Mortgage loan with ID {loan_id} not found")
-        raise HTTPException(status_code=404, detail="Loan not found")
-    return db_loan
-
-
-@app.delete("/loans/mortgage/{loan_id}")
-def delete_mortgage_loan(
-    loan_id: int,
-    db: Session = Depends(get_db),
-    username: str = Depends(get_current_user),
-):
-    logger.info(f"Deleting mortgage loan with ID: {loan_id}")
-    crud.delete_loan(db, loan_id=loan_id, loan_model=models.MortgageLoan)
-    return {"detail": "Loan deleted"}
-
+# Include routers
+app.include_router(personal_loans.router)
+app.include_router(mortgage_loans.router)
 
 if __name__ == "__main__":
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)

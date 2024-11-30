@@ -119,3 +119,30 @@ def test_full_scenario_mortgage_loan():
     url = f"http://localhost:8000/loans/mortgage/{loan_id}"
     response = requests.get(url, auth=get_auth())
     assert response.status_code == 404
+
+
+def test_bad_password():
+    # Test with incorrect password
+    bad_auth = requests.auth.HTTPBasicAuth(USERNAME, "wrongpassword")
+
+    # Test creating a personal loan with bad password
+    url = "http://localhost:8000/loans/personal"
+    payload = {
+        "amount": 500000,
+        "interest_rate": 5.5,
+        "term_months": 360,
+        "purpose": "car",
+    }
+    response = requests.post(url, json=payload, auth=bad_auth)
+    assert response.status_code == 401
+
+    # Test creating a mortgage loan with bad password
+    url = "http://localhost:8000/loans/mortgage"
+    payload = {
+        "amount": 500000,
+        "interest_rate": 5.5,
+        "term_months": 360,
+        "address": "123 Main St",
+    }
+    response = requests.post(url, json=payload, auth=bad_auth)
+    assert response.status_code == 401
