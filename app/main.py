@@ -58,9 +58,6 @@ def get_current_user(credentials: HTTPBasicCredentials = Depends(security)):
 @app.get("/health")
 async def root():
     logger.info("Health check endpoint called")
-    # print user and password
-    print(os.getenv("BASIC_AUTH_USERNAME"))
-    print(os.getenv("BASIC_AUTH_PASSWORD"))
     return {"message": "the application is running"}
 
 
