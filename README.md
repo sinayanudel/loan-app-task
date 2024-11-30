@@ -4,7 +4,9 @@ This project is a FastAPI-based application for managing personal and mortgage l
 
 ## Security Aspects
 
-TODO
+The application uses Basic Authentication to secure its endpoints. Users must provide a valid username and password to access the API. The credentials are verified against a predefined list of users stored in the application configuration.
+
+In the production environment, the app use HTTPS instead of HTTP to ensure the security and privacy of the data transmitted between the client and the server. HTTPS encrypts the data, making it difficult for unauthorized parties to intercept and read the information.
 
 ## Development Environment
 
