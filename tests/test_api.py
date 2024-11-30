@@ -5,6 +5,7 @@ import requests
 
 
 def test_health():
+    # Test the health endpoint to ensure the application is running
     url = "http://localhost:8000/health"
     response = requests.get(url)
     assert response.status_code == 200
@@ -13,6 +14,7 @@ def test_health():
 
 
 def test_full_scenario_personal_loan():
+    # Test creating a personal loan
     url = "http://localhost:8000/loans/personal"
     payload = {
         "amount": 500000,
@@ -25,14 +27,16 @@ def test_full_scenario_personal_loan():
     data = response.json()
     assert "id" in data
     assert data["amount"] == 500000
-    # check get request with this id
+
+    # Test retrieving the created personal loan
     loan_id = data["id"]
     url = f"http://localhost:8000/loans/personal/{loan_id}"
     response = requests.get(url)
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == loan_id
-    # check update request with this id
+
+    # Test updating the personal loan
     url = f"http://localhost:8000/loans/personal/{loan_id}"
     payload = {
         "amount": 600000,
@@ -44,19 +48,22 @@ def test_full_scenario_personal_loan():
     assert response.status_code == 200
     data = response.json()
     assert data["amount"] == 600000
-    # check delete request with this id
+
+    # Test deleting the personal loan
     url = f"http://localhost:8000/loans/personal/{loan_id}"
     response = requests.delete(url)
     assert response.status_code == 200
     data = response.json()
     assert data["detail"] == "Loan deleted"
-    # check get request with this id
+
+    # Test retrieving the deleted personal loan (should return 404)
     url = f"http://localhost:8000/loans/personal/{loan_id}"
     response = requests.get(url)
     assert response.status_code == 404
 
 
 def test_full_scenario_mortgage_loan():
+    # Test creating a mortgage loan
     url = "http://localhost:8000/loans/mortgage"
     payload = {
         "amount": 500000,
@@ -69,14 +76,16 @@ def test_full_scenario_mortgage_loan():
     data = response.json()
     assert "id" in data
     assert data["amount"] == 500000
-    # check get request with this id
+
+    # Test retrieving the created mortgage loan
     loan_id = data["id"]
     url = f"http://localhost:8000/loans/mortgage/{loan_id}"
     response = requests.get(url)
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == loan_id
-    # check update request with this id
+
+    # Test updating the mortgage loan
     url = f"http://localhost:8000/loans/mortgage/{loan_id}"
     payload = {
         "amount": 600000,
@@ -88,13 +97,15 @@ def test_full_scenario_mortgage_loan():
     assert response.status_code == 200
     data = response.json()
     assert data["amount"] == 600000
-    # check delete request with this id
+
+    # Test deleting the mortgage loan
     url = f"http://localhost:8000/loans/mortgage/{loan_id}"
     response = requests.delete(url)
     assert response.status_code == 200
     data = response.json()
     assert data["detail"] == "Loan deleted"
-    # check get request with this id
+
+    # Test retrieving the deleted mortgage loan (should return 404)
     url = f"http://localhost:8000/loans/mortgage/{loan_id}"
     response = requests.get(url)
     assert response.status_code == 404
