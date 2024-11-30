@@ -10,21 +10,26 @@ class LoanBase(BaseModel):
 
 class PersonalLoanBase(LoanBase):
     purpose: str
-    
+
+
 class MortgageLoanBase(LoanBase):
     address: str
+
 
 class PersonalLoanCreateUpdate(PersonalLoanBase):
     pass
 
+
 class MortgageLoanCreateUpdate(MortgageLoanBase):
     pass
+
 
 class PersonalLoan(PersonalLoanBase):
     id: int
 
     class Config:
         orm_mode = True
+
 
 class MortgageLoan(MortgageLoanBase):
     id: int

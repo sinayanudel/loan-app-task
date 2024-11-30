@@ -1,6 +1,10 @@
 import logging
+import ssl
+import os
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
+import uvicorn
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from .database import engine, get_db
 from . import models, schemas, crud
@@ -14,8 +18,12 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
+# Add HTTPS redirect middleware only in production
+if os.getenv("ENV") == "production":
+    app.add_middleware(HTTPSRedirectMiddleware)
 
-# TODO: add more functionality to the middleware
+
+# Middleware to log requests
 @app.middleware("http")
 async def log_requests(request, call_next):
     logger.info(f"Request: {request.method} {request.url}")
@@ -108,3 +116,9 @@ def delete_mortgage_loan(loan_id: int, db: Session = Depends(get_db)):
     logger.info(f"Deleting mortgage loan with ID: {loan_id}")
     crud.delete_loan(db, loan_id=loan_id, loan_model=models.MortgageLoan)
     return {"detail": "Loan deleted"}
+
+
+if __name__ == "__main__":
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_cert_chain("c:/cert.pem", keyfile="c:/key.pem")
+    uvicorn.run(app, host="0.0.0.0", port=8000, ssl_context=ssl_context)
