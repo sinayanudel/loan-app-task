@@ -47,7 +47,7 @@ Choose your preferred way to run the app locally:
     ```
 2. Set up app using Docker
 
-    Run the following commands in PowerShell:
+    Make sure Docker Desktop is running and run the following commands in PowerShell:
     ```
     # build the Docker image
     docker build -t loan-management-api .
