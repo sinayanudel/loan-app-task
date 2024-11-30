@@ -6,7 +6,7 @@ This project is a FastAPI-based application for managing personal and mortgage l
 
 The application uses Basic Authentication to secure its endpoints. Users must provide a valid username and password to access the API. The credentials are verified against a predefined list of users stored in the application configuration.
 
-In the production environment, the app use HTTPS instead of HTTP to ensure the security and privacy of the data transmitted between the client and the server. HTTPS encrypts the data, making it difficult for unauthorized parties to intercept and read the information.
+In the production environment, the app uses HTTPS instead of HTTP to ensure the security and privacy of the data transmitted between the client and the server. HTTPS encrypts the data, making it difficult for unauthorized parties to intercept and read the information.
 
 **Important:** Do not push sensitive data such as passwords, API keys, or any other confidential information to the shared repository on GitHub. Use environment variables or secret management tools to handle such data securely.
 
@@ -17,11 +17,11 @@ Create a `.env` file in the root directory of the project and add your environme
 BASIC_AUTH_USERNAME=your_username 
 BASIC_AUTH_PASSWORD=your_password
 ```
-Choose your preffered way to run the app locally:
+Choose your preferred way to run the app locally:
 
 1. Set up app using venv
 
-    Run the following commands in powershell:
+    Run the following commands in PowerShell:
     ```
     # create new env
     python -m venv env
@@ -38,7 +38,7 @@ Choose your preffered way to run the app locally:
     ```
 2. Set up app using Docker
 
-    Run the following commands in powershell:
+    Run the following commands in PowerShell:
     ```
     # build the Docker image
     docker build -t loan-management-api .
@@ -50,7 +50,7 @@ When the application is running, you can access the API documentation at http://
 
 ### Testing
 
-While the application is running, run the following command in powershell: 
+While the application is running, run the following command in PowerShell: 
 ```
 pytest .\tests\tests.py
 ```
