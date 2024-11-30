@@ -2,6 +2,15 @@
 
 This project is a FastAPI-based application for managing personal and mortgage loans. It provides endpoints to create, read, update, and delete loan records.
 
+## Database
+
+The application uses SQLAlchemy to interact with the database. In the development environment, SQLite is used, while in the staging and production environments, PostgreSQL is used.
+
+### Tables
+
+- **personal_loans:** Stores records of personal loans, including the loan amount, interest rate, term in months, and the purpose of the loan.
+- **mortgage_loans:** Stores records of mortgage loans, including the loan amount, interest rate, term in months, and the address of the property.
+
 ## Security Aspects
 
 The application uses Basic Authentication to secure its endpoints. Users must provide a valid username and password to access the API. The credentials are verified against a predefined list of users stored in the application configuration.
@@ -61,7 +70,14 @@ The tests validate the full CRUD scenario including its database operations. Sin
 
 ## Staging Environment
 
-TODO
+The staging environment is set up using AWS services to closely mimic the production environment. The architecture includes the following components:
+
+- **VPC (Virtual Private Cloud):** A dedicated network for the application, providing isolation and security.
+- **ECS (Elastic Container Service):** Used to run the Docker containers for the application. ECS manages the deployment, scaling, and operation of the containers.
+- **ECR (Elastic Container Registry):** A fully managed Docker container registry that stores the Docker images.
+- **RDS (Relational Database Service):** A managed PostgreSQL database instance to store the application data.
+- **IAM (Identity and Access Management):** Manages access to AWS resources, ensuring that only authorized users and services can interact with the environment.
+- **AWS Secrets Manager:** Securely stores and manages sensitive information such as database credentials and API keys.
 
 ### Deployment
 
