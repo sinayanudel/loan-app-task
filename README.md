@@ -2,6 +2,10 @@
 
 This project is a FastAPI-based application for managing personal and mortgage loans. It provides endpoints to create, read, update, and delete loan records.
 
+## Security Aspects
+
+TODO
+
 ## Development Environment
 
 Use these PowerShell commands to set up the application:
@@ -20,6 +24,30 @@ Open PowerShell and use the `pytest` command in the project folder to run the fu
 
 TODO
 
+### Deployment
+
+TODO
+
 ### Testing
+
+TODO
+
+### Logs
+
+TODO
+
+## Prod Environment
+
+TODO
+
+### Deployment
+
+TODO
+
+### Testing
+
+TODO
+
+### Logs
 
 TODO

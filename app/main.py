@@ -15,6 +15,14 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 
+# TODO: add more functionality to the middleware
+@app.middleware("http")
+async def log_requests(request, call_next):
+    logger.info(f"Request: {request.method} {request.url}")
+    response = await call_next(request)
+    return response
+
+
 # Health API
 @app.get("/health")
 async def root():
