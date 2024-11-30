@@ -4,3 +4,4 @@ loans.db
 app/__pycache__/*
 tests/__pycache__/*
 app/crud/__pycache__/*
+.env
