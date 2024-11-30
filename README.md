@@ -45,6 +45,9 @@ Choose your preferred way to run the app locally:
 
     # run the Docker container
     docker run -d -p 8000:8000 --env-file .env --name loan-management-api-container loan-management-api
+
+    # view the logs:
+    docker logs -f loan-management-api-container
     ```
 When the application is running, you can access the API documentation at http://127.0.0.1:8000/docs.
 
