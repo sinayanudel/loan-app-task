@@ -17,18 +17,44 @@ Create a `.env` file in the root directory of the project and add your environme
 BASIC_AUTH_USERNAME=your_username 
 BASIC_AUTH_PASSWORD=your_password
 ```
+Choose your preffered way to run the app locally:
 
-Use these PowerShell commands to set up the application:
-```
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+1. Set up app using venv
 
+    Run the following commands in powershell:
+    ```
+    # create new env
+    python -m venv env
+
+    # activate env
+    Set-ExecutionPolicy Unrestricted -Scope Process
+    .\env\Scripts\Activate.ps1
+
+    # install dependencies
+    pip install -r requirements.txt
+
+    # run app
+    uvicorn app.main:app --reload
+    ```
+2. Set up app using Docker
+
+    Run the following commands in powershell:
+    ```
+    # build the Docker image
+    docker build -t loan-management-api .
+
+    # run the Docker container
+    docker run -d -p 8000:8000 --env-file .env --name loan-management-api-container loan-management-api
+    ```
 When the application is running, you can access the API documentation at http://127.0.0.1:8000/docs.
 
 ### Testing
 
-Open PowerShell and use the `pytest` command in the project folder to run the full scenario tests while the application is running on `localhost:8000`. The tests validate the full CRUD scenario including its database operations. Since we test the real app database, this method is safe only for the development environment, not for production.
+While the application is running, run the following command in powershell: 
+```
+pytest .\tests\tests.py
+```
+The tests validate the full CRUD scenario including its database operations. Since we test the real app database, this method is safe only for the development environment, not for production.
 
 ## Staging Environment
 
