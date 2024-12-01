@@ -42,8 +42,8 @@ async def root():
 
 
 # Include routers
-app.include_router(personal_loans.router)
-app.include_router(mortgage_loans.router)
+app.include_router(personal_loans.router, prefix="/loans/personal")
+app.include_router(mortgage_loans.router, prefix="/loans/mortgage")
 
 if __name__ == "__main__":
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)

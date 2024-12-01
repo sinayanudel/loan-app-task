@@ -30,7 +30,7 @@ def get_current_user(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 # Mortgage loans API
-@router.post("/loans/mortgage", response_model=schemas.MortgageLoan)
+@router.post("/", response_model=schemas.MortgageLoan)
 def create_mortgage_loan(
     loan: schemas.MortgageLoanCreateUpdate,
     db: Session = Depends(get_db),
@@ -40,12 +40,14 @@ def create_mortgage_loan(
     return crud.create_loan(db=db, loan=loan, loan_model=models.MortgageLoan)
 
 
-@router.get("/loans/mortgage/{loan_id}", response_model=schemas.MortgageLoan)
+@router.get("/{loan_id}", response_model=schemas.MortgageLoan)
 def read_mortgage_loan(
     loan_id: int,
     db: Session = Depends(get_db),
     username: str = Depends(get_current_user),
 ):
+    if loan_id is None:
+        raise HTTPException(status_code=400, detail="Loan ID must be provided")
     logger.info(f"Reading mortgage loan with ID: {loan_id}")
     db_loan = crud.get_loan(db, loan_id=loan_id, loan_model=models.MortgageLoan)
     if db_loan is None:
@@ -54,13 +56,15 @@ def read_mortgage_loan(
     return db_loan
 
 
-@router.put("/loans/mortgage/{loan_id}", response_model=schemas.MortgageLoan)
+@router.put("/{loan_id}", response_model=schemas.MortgageLoan)
 def update_mortgage_loan(
     loan_id: int,
     loan: schemas.MortgageLoanCreateUpdate,
     db: Session = Depends(get_db),
     username: str = Depends(get_current_user),
 ):
+    if loan_id is None:
+        raise HTTPException(status_code=400, detail="Loan ID must be provided")
     logger.info(f"Updating mortgage loan with ID: {loan_id} with data: {loan}")
     db_loan = crud.update_loan(
         db=db, loan_id=loan_id, loan=loan, loan_model=models.MortgageLoan
@@ -71,12 +75,14 @@ def update_mortgage_loan(
     return db_loan
 
 
-@router.delete("/loans/mortgage/{loan_id}")
+@router.delete("/{loan_id}")
 def delete_mortgage_loan(
     loan_id: int,
     db: Session = Depends(get_db),
     username: str = Depends(get_current_user),
 ):
+    if loan_id is None:
+        raise HTTPException(status_code=400, detail="Loan ID must be provided")
     logger.info(f"Deleting mortgage loan with ID: {loan_id}")
     crud.delete_loan(db, loan_id=loan_id, loan_model=models.MortgageLoan)
     return {"detail": "Loan deleted"}
